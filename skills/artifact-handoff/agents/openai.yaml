@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 文件版本与交付整理"
+  short_description: "记录 AI 生成文件的版本关系，校验最终文件与源文件，整理附带清单和预览的交付包"
+  default_prompt: "使用 $artifact-handoff 扫描我的文件目录，核对版本关系并整理最终交付包。"
