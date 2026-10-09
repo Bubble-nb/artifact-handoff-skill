@@ -34,6 +34,15 @@ class ArtifactsTest(unittest.TestCase):
         self.assertTrue(all(not f['matching_records'] for f in result['files']))
         self.assertFalse((self.root / a.STATE).exists())
 
+    def test_noncanonical_root_is_normalized(self):
+        nested = self.root / 'child'
+        nested.mkdir()
+        noncanonical = nested / '..'
+        record = a.register(noncanonical, 'editable.svg', 'source', 'final')
+        self.assertEqual(record['path'], 'editable.svg')
+        self.assertEqual(len(a.scan(noncanonical)['files']), 2)
+        a.package(noncanonical, [record['id']], self.base / 'normalized-delivery', [])
+
     def test_delivery_hashes_unicode_and_escaping(self):
         s, e = self.records()
         out = self.base / 'delivery'

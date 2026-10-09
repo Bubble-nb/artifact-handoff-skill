@@ -32,6 +32,7 @@ def root_path(value):
 
 
 def safe_file(root, value):
+    root = root_path(root)
     rel = Path(value)
     if rel.is_absolute() or '..' in rel.parts or not rel.parts:
         raise ValueError('File paths must be relative and cannot contain ..')
@@ -89,6 +90,7 @@ def find(data, identity):
 
 
 def register(root, file, role, status='draft', parent=None, note=''):
+    root = root_path(root)
     if role not in ROLES or status not in ('draft', 'final'):
         raise ValueError('Invalid role or status')
     path = safe_file(root, file)
@@ -107,6 +109,7 @@ def register(root, file, role, status='draft', parent=None, note=''):
 
 
 def scan(root):
+    root = root_path(root)
     data = load(root)
     records = data['artifacts']
     files, skipped = [], []
@@ -149,6 +152,7 @@ def scan(root):
 
 
 def package(root, ids, output, required_roles):
+    root = root_path(root)
     if not ids or len(set(ids)) != len(ids):
         raise ValueError('Select unique artifact IDs')
     if any(role not in ROLES for role in required_roles):
